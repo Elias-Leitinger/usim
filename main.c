@@ -26,6 +26,7 @@ unsigned int x = 0; /* vars for loops */
 unsigned int y = 0;
 int run = 1;
 char input;
+int cycle = 0;
 
 unsigned int xcursor = 0;
 unsigned int ycursor = 0;
@@ -108,10 +109,11 @@ int draw()
 		}
 	}
 	mvprintw(YSCREEN - 1, 0, "A: ");
-	printw("%d", barvar[0]);
+	/*printw("%d", barvar[0]);*/
+	printw("%d", cycle++);
 
 	/* Cursor Section */
-	/*move(ycursor, xcursor);*/
+	move(ycursor, xcursor);
 	refresh();
 	
 	return 0;
@@ -141,6 +143,35 @@ void wtest()
 	walls[3][1]=1;
 }
 
+int evalkey(char input){
+	switch(input){
+	case ESC:
+		run = 0;
+		break;
+	case 'w':
+		if(ycursor != 0)
+			ycursor--;
+		break;
+	case 's':
+		if(ycursor < YWORLD - 1)
+			ycursor++;
+		break;
+	case 'a':
+		if(xcursor != 0)
+			xcursor--;
+		break;
+	case 'd':
+		if(xcursor < XWORLD - 1)
+			xcursor++;
+		break;
+	case 'q':
+		walls[xcursor][ycursor] = 1;
+		break;
+	default:{};
+	}
+	return 0;
+}
+
 int main()
 {
 	curs_set(0);
@@ -153,16 +184,14 @@ int main()
         /*ini_bar();
 	ini_world();
 	ini_wall();*/
-	ini();
+ 	ini();
 	wtest();
 	draw();
 	while(run){
 		input = getch();
-		if(input != ERR){
-			switch(input){
-			case ESC: run = 0;
-			}
-		}
+		if(input != ERR)
+			evalkey(input);
+		draw();
 	}
 	
 	endwin();
