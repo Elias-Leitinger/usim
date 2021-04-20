@@ -20,7 +20,7 @@
 
 
 # Makefile for Simulator
-objects = main.o walls.o
+objects = main.o walls.o stacks.o
 CC = gcc
 CFLAGS = -g -Wall -pedantic -lncurses
 LIBS   = "-lncurses "
