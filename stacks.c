@@ -29,9 +29,6 @@ typedef struct stack stack;
  * *elements: pointer to array elements
  * size: amount of allocated array elements
  * index: index of highest element 
- * example: highest element of array: { *(stack.elements + stack.index) }
- * TODO: TEST FUNCTIONS
- * TODO: make stack->elements samaller when possible in pop function
  */
 struct stack {
 	int *elements;
@@ -41,59 +38,59 @@ struct stack {
 
 stack * makestack()
 {
-	stack *stack;
-	stack = malloc(sizeof(stack));
-	stack->elements = malloc(STCKBLK * sizeof(int));
+	stack *st;
+	st = malloc(sizeof(stack));
+	st->elements = malloc(STCKBLK * sizeof(st->elements));
 	
-	stack->size = STCKBLK;
-	stack->index = 0;
-	stack->elements[0] = STCKINI;
-	return stack;
+	st->size = STCKBLK;
+	st->index = 0;
+	st->elements[0] = STCKINI;
+	return st;
 }
 
-int freestack(stack *stack)
+int freestack(stack *st)
 {
-	free(stack->elements);
-	free(stack);
+	free(st->elements);
+	free(st);
 	return 0;
 }
 
-int clearstack(stack *stack)
+/*int clearstack(stack *st)  FUBAR
 {
 	
-	freestack(stack);
-	stack = malloc(sizeof(stack));
-	stack->elements = malloc(STCKBLK * sizeof(int));
+	freestack(st);
+	st = malloc(sizeof(stack));
+	st->elements = malloc(STCKBLK  * sizeof(st->elements));
 	
-	stack->index = 0;
-	stack->size = STCKBLK;
-	stack->elements[0] = STCKINI;
+	st->index = 0;
+	st->size = STCKBLK;
+	st->elements[0] = STCKINI;
 	return 0;
-}
+	}*/
 
-int push(stack *stack, int value)
+int push(stack *st, int value)
 {
-	if((stack->index + 1) >= stack->size){
-		stack->elements = realloc(stack->elements, stack->size + STCKBLK);
-		stack->size += STCKBLK;
+	if((st->index + 1) >= st->size){
+		st->elements = realloc(st->elements, (st->size + STCKBLK) * sizeof(st->elements));
+		st->size += STCKBLK;
 	}
 	
-	stack->index++;
-	stack->elements[stack->index] = value;
+	st->index++;
+	st->elements[st->index] = value;
 	return 0;
 }
 
-int top(stack *stack)
+int top(stack *st)
 {
-	return stack->elements[stack->index];
+	return st->elements[st->index];
 }
 
-int pop(stack *stack)
+int pop(stack *st)
 {
-	if(stack->index == 0){
+	if(st->index == 0){
 		printf("ERR: pop on stack with index 0!\n");
-		return stack->elements[0];
+		return st->elements[0];
 	}
 	else
-		return stack->elements[stack->index--];
+		return st->elements[st->index--];
 }

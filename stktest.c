@@ -20,6 +20,7 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "stacks.c"
 
 /* Simple program to test stack functions*/
@@ -30,6 +31,7 @@ Output should be
 3 <-simple push and pop
 2 <-´
 99 <- push to stack with index > STCKBLK
+39 <- check if stack is made smaller
 ERR: pop on stack with index 0!  
 -1        This error *should* occour! -1 is empty stack init
 4  <- top function test
@@ -40,21 +42,37 @@ ERR: pop on stack with index 0!
 
 int main()
 {
+
+
+	
 	int i;
+
+	
+	printf("Make Stack\n");
 	stack *S = makestack();
+	
+	printf("Basic:\n");
 	push(S, 2);
 	push(S, 3);
 	printf("%d\n", pop(S));
 	printf("%d\n", pop(S));
+	
+	printf("Enlarge:\n");
 	for(i = 0; i < 100; i++)
 		push(S, i);
 	printf("%d\n", pop(S));
-	clearstack(S);
+
+	printf("Clear and free.\n");
+	freestack(S);
+	S = makestack();
 	printf("%d\n", pop(S));
 	freestack(S);
 	S = makestack();
+
+	printf("Test Top:\n");
 	push(S, 4);
 	printf("%d\n", top(S));
 	printf("%d\n", pop(S));
+	freestack(S);
 	return 0;
 }
