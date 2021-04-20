@@ -68,6 +68,25 @@ struct timeval start, end; //timevals which contain start and end time of main l
 /*struct timespec wait, rem;*/
 long duration; //end - start
 
+
+
+
+/*
+ * Sleep for number of microseconds
+ */
+
+void usleep(long microseconds)
+{
+	struct timespec ts;
+	if(microseconds < 0)
+		return;
+	ts.tv_sec = 0;             /* whole seconds */
+	ts.tv_nsec = (microseconds % 1000000) * 1000;    /* remainder, in nanoseconds */
+	nanosleep(&ts, NULL);
+}
+
+
+
 /*
  * Run at the start of the session to initiate the world array to id 0
  */
@@ -111,7 +130,16 @@ int ini_bar()
 	return 0;
 }
 
-
+int ini()
+{
+	ini_bar();
+	ini_world();
+	ini_wall();
+	build.x = 0;
+	build.y = 0;
+	build.enabled = 0;
+	return 0;
+}
 
 /*
  * Draw the World and the status bar in the appropriate locations
@@ -163,16 +191,7 @@ int draw()
 	return 0;
 }
 
-int ini()
-{
-	ini_bar();
-	ini_world();
-	ini_wall();
-	build.x = 0;
-	build.y = 0;
-	build.enabled = 0;
-	return 0;
-}
+
 
 void wtest()
 {
@@ -190,24 +209,10 @@ void wtest()
 	walls[3][1]=1;
 }
 
-/*
- * Sleep for number of microseconds
- */
-
-void usleep(long microseconds)
-{
-	struct timespec ts;
-	if(microseconds < 0)
-		return;
-	ts.tv_sec = 0;             /* whole seconds */
-	ts.tv_nsec = (microseconds % 1000000) * 1000;    /* remainder, in nanoseconds */
-	nanosleep(&ts, NULL);
-}
 
 /*
  * called to process input when required
  */
-
 
 int evalkey(char input)
 {
