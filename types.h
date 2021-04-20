@@ -25,8 +25,7 @@ typedef struct object object;
 /* create type for moving things*/
 typedef struct entity entity;
 
-/* type for stacks */
-typedef struct stack stack;
+
 
 /*
 id: unique object identifier, if 0, ignore object
@@ -51,15 +50,4 @@ struct entity {
 	/* TODO! */
 };
 
-/*
- * *elements: pointer to array elements
- * size: amount of allocated array elements
- * index: index of highest element 
- * example: highest element of array: { *(stack.elements + stack.index) }
- * TODO: Implement functions for array handling
- */
-struct stack {
-	int *elements;
-	int size;
-	int index;
-};
+

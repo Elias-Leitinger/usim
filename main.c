@@ -32,6 +32,7 @@
 #include "./types.h"
 #include "./walls.c"
 #include "./define.h"
+#include "stacks.c"
 
 int world[XWORLD][YWORLD]; /*array which contains the world*/
 int walls[XWORLD][YWORLD];

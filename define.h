@@ -37,5 +37,7 @@
 #define XSCREEN XWORLD
 #define YSCREEN YWORLD + YBAR
 
+#define STCKBLK 80
+#define STCKINI -1
 
 #define ESC 27
