@@ -166,7 +166,8 @@ void wtest()
 	walls[3][1]=1;
 }
 
-int evalkey(char input){
+int evalkey(char input)
+{
 	switch(input){
 	case ESC:
 		run = 0;
