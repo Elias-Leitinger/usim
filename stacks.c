@@ -74,7 +74,7 @@ int clearstack(stack *stack)
 int push(stack *stack, int value)
 {
 	if((stack->index + 1) >= stack->size){
-		stack = realloc(stack, stack->size + STCKBLK);
+		stack->elements = realloc(stack->elements, stack->size + STCKBLK);
 		stack->size += STCKBLK;
 	}
 	
@@ -91,7 +91,7 @@ int top(stack *stack)
 int pop(stack *stack)
 {
 	if(stack->index == 0){
-		printf("ERR: pop on stack with index 0!");
+		printf("ERR: pop on stack with index 0!\n");
 		return stack->elements[0];
 	}
 	else
