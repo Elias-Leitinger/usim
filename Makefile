@@ -22,7 +22,7 @@
 # Makefile for Simulator
 objects = main.o walls.o
 CC = gcc
-CFLAGS = -ansi -g -Wall -pedantic -lncurses
+CFLAGS = -g -Wall -pedantic -lncurses
 LIBS   = "-lncurses "
 
 

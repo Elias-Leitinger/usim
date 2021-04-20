@@ -28,6 +28,9 @@
  *XWORLD & YWORLD: Size of the World array
  *XBAR & YBAR: Set the size of the status bar
  *XSCREEN & YSCREEN: Combined size of World and bar
+ *CYCLETIME... minimum time in ms per cycle
+ *STCKBLK amount to be used per stack extension
+ *STCKINI value of initial stack element
  *
  */
 #define XWORLD 80
@@ -36,6 +39,8 @@
 #define YBAR 3
 #define XSCREEN XWORLD
 #define YSCREEN YWORLD + YBAR
+
+#define CYCLETIME 10000
 
 #define STCKBLK 80
 #define STCKINI -1

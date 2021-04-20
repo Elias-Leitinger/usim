@@ -28,6 +28,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <sys/time.h>
+#include <time.h>
 #include <ncurses.h>
 #include "./types.h"
 #include "./walls.c"
@@ -49,10 +51,14 @@ unsigned int x = 0; /* vars for loops */
 unsigned int y = 0;
 int run = 1;
 char input;
-int cycle = 0;
+long int cycle = 0;
 
 unsigned int xcursor = 0;
 unsigned int ycursor = 0;
+
+struct timeval start, end;
+/*struct timespec wait, rem;*/
+long duration;
 
 /*
  * Run at the start of the session to initiate the world array to id 0
@@ -166,6 +172,16 @@ void wtest()
 	walls[3][1]=1;
 }
 
+void usleep(long microseconds)
+{
+	struct timespec ts;
+	if(microseconds < 0)
+		return;
+	ts.tv_sec = microseconds / 1000000;             // whole seconds
+	ts.tv_nsec = (microseconds % 1000000) * 1000;    // remainder, in nanoseconds
+	nanosleep(&ts, NULL);
+}
+
 int evalkey(char input)
 {
 	switch(input){
@@ -212,13 +228,20 @@ int main()
 	wtest();
 	draw();
 	while(run){
+		gettimeofday(&start, NULL);
+	
 		input = getch();
 		if(input != ERR)
 			evalkey(input);
 		draw();
+
+	        gettimeofday(&end, NULL);
+		duration = end.tv_usec - start.tv_usec;
+		usleep(CYCLETIME - duration);
 	}
 	
 	endwin();
 	curs_set(1);
+	printf("%ld", duration);
 	return 0;
 }

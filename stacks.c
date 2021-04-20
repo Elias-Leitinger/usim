@@ -20,6 +20,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <errno.h>
 #include "define.h"
 
 /* type for stacks */
@@ -36,11 +37,21 @@ struct stack {
 	int index;
 };
 
+void memerr()
+{
+	if(errno == ENOMEM){
+		printf("ERR: MALLOC FAILURE");
+		abort();
+	}
+}
+
 stack * makestack()
 {
 	stack *st;
 	st = malloc(sizeof(stack));
+	memerr();
 	st->elements = malloc(STCKBLK * sizeof(st->elements));
+	memerr();
 	
 	st->size = STCKBLK;
 	st->index = 0;
@@ -72,6 +83,7 @@ int push(stack *st, int value)
 {
 	if((st->index + 1) >= st->size){
 		st->elements = realloc(st->elements, (st->size + STCKBLK) * sizeof(st->elements));
+		memerr();
 		st->size += STCKBLK;
 	}
 	
