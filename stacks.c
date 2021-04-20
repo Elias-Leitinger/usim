@@ -90,7 +90,6 @@ int pop(stack *st)
 	if(st->index == 0){
 		printf("ERR: pop on stack with index 0!\n");
 		return st->elements[0];
-	}
-	else
+	}else
 		return st->elements[st->index--];
 }

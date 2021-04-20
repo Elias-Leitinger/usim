@@ -28,12 +28,14 @@
 /*
 Output should be
 
+Basic:
 3 <-simple push and pop
 2 <-´
+Enlarge:
 99 <- push to stack with index > STCKBLK
-39 <- check if stack is made smaller
 ERR: pop on stack with index 0!  
 -1        This error *should* occour! -1 is empty stack init
+Test Top:
 4  <- top function test
 4  <-´
 
