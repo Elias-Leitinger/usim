@@ -177,8 +177,8 @@ void usleep(long microseconds)
 	struct timespec ts;
 	if(microseconds < 0)
 		return;
-	ts.tv_sec = microseconds / 1000000;             // whole seconds
-	ts.tv_nsec = (microseconds % 1000000) * 1000;    // remainder, in nanoseconds
+	ts.tv_sec = 0;             /* whole seconds */
+	ts.tv_nsec = (microseconds % 1000000) * 1000;    /* remainder, in nanoseconds */
 	nanosleep(&ts, NULL);
 }
 
@@ -242,6 +242,5 @@ int main()
 	
 	endwin();
 	curs_set(1);
-	printf("%ld", duration);
 	return 0;
 }

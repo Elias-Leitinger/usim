@@ -29,14 +29,18 @@ char wallt (int x, int y, int walls[][YWORLD])
 	int right = ((x + 1) == XWORLD) ? 0 : walls[x + 1][y];
 	int down = ((y + 1) == YWORLD) ? 0 : walls[x][y + 1];
 
-	int sum = left + right + up + down;
+	/*int sum = left + right + up + down;
 	if(sum >= 3)
-		return '+';
+	  return '+';*/
+	
+	if(up && down)
+		return '|';
 	else if(left && right)
 		return '-';
-	else if(up && down)
+	else if((up || down) && !(left || right))
 		return '|';
-	
+	else if((left || right) && !(up || down))
+		return '-';
 	else
 		return'+';
 }
