@@ -98,6 +98,11 @@ int pop(stack *st)
 	if(st->index == 0){
 		printf("ERR: pop on stack with index 0!\n");
 		return st->elements[0];
+	}else if(st->index < (st->size - STCKBLK)){
+		st->elements = realloc(st->elements, sizeof(int) * st->size -\
+				       sizeof(int) * STCKBLK);
+		st->size -= STCKBLK;
+		return st->elements[st->index--];
 	}else
 		return st->elements[st->index--];
 }

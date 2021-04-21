@@ -64,6 +64,11 @@ int main()
 		push(S, i);
 	printf("%d\n", pop(S));
 
+	printf("shrink:\n");
+	//S->index = 20;
+	for(i = 99; i > 0 ;i--)
+		pop(S);
+
 	printf("Clear and free.\n");
 	freestack(S);
 	S = makestack();
