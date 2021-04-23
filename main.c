@@ -194,13 +194,6 @@ int draw()
 	return 0;
 }
 
-void change(int *x ,int *y)
-{
-	int temp = *x;
-	*x = *y;
-	*y = temp;
-}
-
 
 int bwall(int org_x,int org_y,int des_x,int des_y)
 {
