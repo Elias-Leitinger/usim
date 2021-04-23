@@ -56,11 +56,14 @@ long int cycle = 0; //cycle counter
 unsigned int xcursor = 0; //x and y pos of cursor
 unsigned int ycursor = 0;
 
+typedef struct selection selection;
+
 struct selection{   //struct for selections
 	int x;
 	int y;
 	int enabled;
 };
+
 
 struct selection build; //point selection for building
 
@@ -191,9 +194,46 @@ int draw()
 	return 0;
 }
 
+void change(int *x ,int *y)
+{
+	int temp = *x;
+	*x = *y;
+	*y = temp;
+}
 
 
-void wtest()
+int bwall(int org_x,int org_y,int des_x,int des_y)
+{
+	int start; //smaller number 
+	int end;
+	int other;
+	int x_diff = org_x != des_x ? 1 : 0;
+	int y_diff = org_y != des_y ? 1 : 0;
+	int loop; //loop iteration variable
+	if(x_diff == y_diff) //if both pairs are equal or different return 1;
+		return 1;
+	if(x_diff){
+		start = org_x < des_x ? org_x : des_x;
+		end = org_x > des_x ? org_x : des_x;
+		other = org_y;
+	}
+	if(y_diff){
+		start = org_y < des_y ? org_y : des_y;
+		end = org_y > des_y ? org_y : des_y;
+		other = org_x;
+	}
+
+	for(loop = start; loop <= end; loop++){
+		if(x_diff)
+			walls[loop][other] = 1;
+		if(y_diff)
+			walls[other][loop] = 1;
+	}
+	
+	return 0;
+}
+
+void wtest()  //remove asap!!
 {
 	world[3][3]=1;
 	walls[2][2]=1;
@@ -237,7 +277,7 @@ int evalkey(char input)
 			xcursor++;
 		break;
 	case 'q':
-		walls[xcursor][ycursor] = 1;
+		walls[xcursor][ycursor] = 2;
 		break;
 	case 'e':
 		build.x = xcursor;
@@ -248,7 +288,7 @@ int evalkey(char input)
 			build.enabled = 1;
 		break;
 	case 'r':
-		//bwall(xcursor, ycursor, build); TODO!
+		bwall(xcursor, ycursor, build.x, build.y);
 		break;
 	default:{};
 	}

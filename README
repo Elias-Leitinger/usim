@@ -3,5 +3,7 @@ VERY unfinished
 Implemented for Testing:
 
 + Movement with WASD
-+ build walls with q
-+ count cycles
++ Set building selection with e
++ Build Walls from selection to cursor with r (only straight lines!)
++ Build door with q
++ Count cycles
