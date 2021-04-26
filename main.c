@@ -203,8 +203,10 @@ int bwall(int org_x,int org_y,int des_x,int des_y)
 	int x_diff = org_x != des_x ? 1 : 0;
 	int y_diff = org_y != des_y ? 1 : 0;
 	int loop; //loop iteration variable
-	if(x_diff == y_diff) //if both pairs are equal or different return 1;
+	if(x_diff == y_diff){ //if both pairs are equal or different
+		walls[org_x][org_y] = 1;
 		return 1;
+	}
 	if(x_diff){
 		start = org_x < des_x ? org_x : des_x;
 		end = org_x > des_x ? org_x : des_x;
