@@ -59,8 +59,8 @@ unsigned int ycursor = 0;
 typedef struct selection selection;
 
 struct selection{   //struct for selections
-	int x;
-	int y;
+	unsigned int x;
+	unsigned int y;
 	int enabled;
 };
 
@@ -244,6 +244,19 @@ void wtest()  //remove asap!!
 	walls[3][1]=1;
 }
 
+int setbcurs(){
+	int samepos = 0;
+	if(build.x == xcursor && build.y == ycursor)
+		samepos = 1;
+	build.x = xcursor;
+	build.y = ycursor;
+	if(build.enabled && samepos)
+		build.enabled = 0;
+	else
+		build.enabled = 1;
+	return 0;
+}
+
 
 /*
  * called to process input when required
@@ -275,15 +288,11 @@ int evalkey(char input)
 		walls[xcursor][ycursor] = 2;
 		break;
 	case 'e':
-		build.x = xcursor;
-		build.y = ycursor;
-		if(build.enabled)
-			build.enabled = 0;
-		else
-			build.enabled = 1;
+		setbcurs();
 		break;
 	case 'r':
-		bwall(xcursor, ycursor, build.x, build.y);
+		if(build.enabled)
+			bwall(xcursor, ycursor, build.x, build.y);
 		break;
 	default:{};
 	}
