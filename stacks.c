@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
+#include <limits.h>
 #include "define.h"
 
 /* type for stacks */
@@ -100,7 +101,7 @@ int top(stack *st)
 int pop(stack *st)
 {
 	if(st->index == 0){
-		return -1;
+		return INT_MIN;
 	}else if(st->index < (st->size - STCKBLK)){
 		st->elements = realloc(st->elements, sizeof(int) * st->size -\
 				       sizeof(int) * STCKBLK);

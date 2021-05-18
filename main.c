@@ -174,7 +174,7 @@ int move_peeps()
 		if(people[index].type){
 			int x = pop(people[index].path_x);
 			int y = pop(people[index].path_y);
-			if(x != -1 && y != -1){
+			if(x != INT_MIN && y != INT_MIN){
 				people[index].x = x;
 				people[index].y = y;
 			}
@@ -290,7 +290,13 @@ void wtest()  //remove asap!!
 	walls[2][0]=1;
 	walls[3][0]=1;
 	walls[3][1]=1;
-
+	people[0].type = 1;
+	people[0].x = 10;
+	people[0].y = 10;
+	people[0].path_x = makestack();
+	people[0].path_y = makestack();
+	push(people[0].path_x, 20);
+	push(people[0].path_y, 15);
 }
 
 int setbcurs(){
