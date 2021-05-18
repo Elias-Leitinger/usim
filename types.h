@@ -25,7 +25,8 @@
 typedef struct object object;
 /* create type for moving things*/
 typedef struct entity entity;
-
+// struct which contains the needs of people
+typedef struct needs needs;
 
 
 /*
@@ -42,16 +43,24 @@ struct object {
 	object *content;
 };                           
 
+struct needs {
+	float food; //values from 0 - 100
+	float sleep;//100 is always best,
+        float fun;  //0 is always worst
+	float toilet;
+};
+
 struct entity {
 	int type;
 	int x;
 	int y;
+	char *name;
 	object *using;
 	object *target;
 	stack *tasks;
 	stack *path_x;
 	stack *path_y;
+	needs need;
 	/* TODO! */
 };
-
 

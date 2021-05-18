@@ -180,9 +180,29 @@ int move_peeps()
 			}
 				
 		}
-			
+		/*printw("%d", barvar[0]);*/		
 	}
 	return 0;
+}
+
+int peep_here(int x, int y) 
+{
+	for(int i = 0; i < MAXENT; i++){
+		if((people[i].x == x && people[i].y == y) && people[i].type != 0)
+			return i;
+	}
+	return INT_MIN;
+}
+
+void peep_needs(){
+	for(int i = 0; i < MAXENT; i++){
+		if(people[i].type != 0){
+			people[i].need.sleep -= 0.1;
+			people[i].need.toilet -= 0.5;
+			people[i].need.food -= 0.25;
+			people[i].need.fun -= 0.2;
+		}
+	}
 }
 
 /*
@@ -224,14 +244,25 @@ int draw()
 		}
 	}
 
+	int id = peep_here(xcursor, ycursor);
+	if(id != INT_MIN){
+		move(YSCREEN - 1, 0);
+		printw("  FOOD:%.1f SLP:%.1f TOIL:%.1f FUN:%.1f",\
+		       people[id].need.food,\
+		       people[id].need.sleep, people[id].need.toilet,\
+			people[id].need.fun);
+		mvprintw(YSCREEN - 2, 0, "  %s", people[id].name);
+	}
+
+	
+	mvprintw(YSCREEN - 1, 70, "A: ");
+        printw("%d", cycle++);
 	/* build selection */
 	if(build.enabled){
 		mvaddch(build.y, build.x, 'X');
 	}
 	
-	mvprintw(YSCREEN - 1, 0, "A: ");
-	/*printw("%d", barvar[0]);*/
-	printw("%d", cycle++);
+
 
 	/* Cursor Section */
 	move(ycursor, xcursor);
@@ -278,7 +309,6 @@ int bwall(int org_x,int org_y,int des_x,int des_y)
 
 void wtest()  //remove asap!!
 {
-	world[3][3]=1;
 	walls[2][2]=1;
 	walls[3][2]=1;
 	walls[1][2]=1;
@@ -293,6 +323,8 @@ void wtest()  //remove asap!!
 	people[0].type = 1;
 	people[0].x = 10;
 	people[0].y = 10;
+	people[0].name = "MAX MUSTERMANN";
+	people[0].need = (needs){100, 100, 100, 100};
 	people[0].path_x = makestack();
 	people[0].path_y = makestack();
 	push(people[0].path_x, 20);
@@ -376,8 +408,10 @@ int main()
 		if(input != ERR)
 			evalkey(input);
 		draw();
-		if(cycle % 100 == 0)
+		if(cycle % 100 == 0){
 			move_peeps();
+			peep_needs();
+		}
 	        gettimeofday(&end, NULL); //cycle time end
 		duration = end.tv_usec - start.tv_usec;
 		usleep(CYCLETIME - duration); //sleep to make sure cycle takes ~CYCLETIME
