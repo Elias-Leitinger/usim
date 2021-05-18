@@ -40,6 +40,8 @@
 #define XSCREEN XWORLD
 #define YSCREEN YWORLD + YBAR
 
+#define MAXENT 8
+
 #define CYCLETIME 10000
 
 #define STCKBLK 80

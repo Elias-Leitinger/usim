@@ -39,6 +39,8 @@
 int world[XWORLD][YWORLD]; /*array which contains the world*/
 int walls[XWORLD][YWORLD]; //wall array
 int bar[XBAR][YBAR]; /* array which contains the status bar */
+int collision[XWORLD][YWORLD]; /*Used for collision detection*/
+entity people[MAXENT];
 int barvar[]={
 	1,
 	2
@@ -47,8 +49,9 @@ char type2char[]={     /* table for converting entity/object id to printable cha
 	'.',
 	'a'
 };
-unsigned int x = 0; /* vars for loops */
-unsigned int y = 0;
+//unsigned int x = 0; /* vars for loops */
+//unsigned int y = 0;
+//unsigned int tmp = 0;
 int run = 1;  //main game loop enabled
 char input; //used for input processing
 long int cycle = 0; //cycle counter
@@ -95,8 +98,8 @@ void usleep(long microseconds)
  */
 int ini_world()
 {
-	for(y = 0; y < YWORLD; y++){
-		for(x = 0; x < XWORLD; x++){
+	for(int y = 0; y < YWORLD; y++){
+		for(int x = 0; x < XWORLD; x++){
 			world[x][y] = 0;
 		}
 	}
@@ -108,8 +111,8 @@ int ini_world()
  */
 int ini_wall()
 {
-	for(y = 0; y < YWORLD; y++){
-		for(x = 0; x < XWORLD; x++){
+	for(int y = 0; y < YWORLD; y++){
+		for(int x = 0; x < XWORLD; x++){
 			world[x][y] = 0;
 		}
 	}
@@ -122,14 +125,21 @@ int ini_wall()
 int ini_bar()
 {
 
-	for(y = 0; y < YBAR; y++){
-		for(x = 0; x < XBAR; x++){
+	for(int y = 0; y < YBAR; y++){
+		for(int x = 0; x < XBAR; x++){
 			bar[x][y] = ' ';
 		}
 	}
-	for(x = 0; x < XBAR; x++){
+	for(int x = 0; x < XBAR; x++){
 			bar[x][0] = '=';
 		}
+	return 0;
+}
+
+int ini_people()
+{
+	for(int tmp = 0; tmp < MAXENT; tmp++)
+		people[tmp].type = 0;
 	return 0;
 }
 
@@ -138,9 +148,40 @@ int ini()
 	ini_bar();
 	ini_world();
 	ini_wall();
+	ini_people();
 	build.x = 0;
 	build.y = 0;
 	build.enabled = 0;
+	return 0;
+}
+
+
+void makecoll() //TODO: Test
+{
+	for(int y = 0; y < YWORLD; y++){
+		for(int x = 0; x < XWORLD; x++){
+			collision[x][y] = walls[x][y] == 1 ? 1 : collision[x][y];
+			collision[x][y] = world[x][y] != 0 ? 1 : collision[x][y];
+			//mvaddch(y, x, type2char[ world[x][y] ]);
+		}
+	}
+}
+
+
+int move_peeps()
+{
+	for(int index = 0; index < MAXENT; index++){
+		if(people[index].type){
+			int x = pop(people[index].path_x);
+			int y = pop(people[index].path_y);
+			if(x != -1 && y != -1){
+				people[index].x = x;
+				people[index].y = y;
+			}
+				
+		}
+			
+	}
 	return 0;
 }
 
@@ -151,16 +192,16 @@ int draw()
 {
 	
 	/* World Part */
-	for(y = 0; y < YWORLD; y++){
-		for(x = 0; x < XWORLD; x++){
+	for(int y = 0; y < YWORLD; y++){
+		for(int x = 0; x < XWORLD; x++){
 			
 			mvaddch(y, x, type2char[ world[x][y] ]);
 		}
 	}
 
 	/* Wall Part TODO: Add logic for connected worlds*/
-	for(y = 0; y < YWORLD; y++){
-		for(x = 0; x < XWORLD; x++){
+	for(int y = 0; y < YWORLD; y++){
+		for(int x = 0; x < XWORLD; x++){
 
 			if(walls[x][y]){
 				mvaddch(y, x, wallt(x, y,walls));
@@ -169,10 +210,15 @@ int draw()
 	}
 
 	/* TODO Add logic to draw entities and creaste entity storage*/
+
+	for(int tmp = 0; tmp < MAXENT; tmp++){
+		if(people[tmp].type != 0)
+			mvaddch(people[tmp].y, people[tmp].x, type2char[people[tmp].type]);
+	}
 	
 	/* bar section */
-	for(y = 0; y < YBAR; y++){
-		for(x = 0; x < XBAR; x++){
+	for(int y = 0; y < YBAR; y++){
+		for(int x = 0; x < XBAR; x++){
 			
 			mvaddch(y + YWORLD, x, bar[x][y]);
 		}
@@ -190,6 +236,8 @@ int draw()
 	/* Cursor Section */
 	move(ycursor, xcursor);
 	refresh();
+
+	makecoll();
 	
 	return 0;
 }
@@ -242,6 +290,7 @@ void wtest()  //remove asap!!
 	walls[2][0]=1;
 	walls[3][0]=1;
 	walls[3][1]=1;
+
 }
 
 int setbcurs(){
@@ -291,8 +340,11 @@ int evalkey(char input)
 		setbcurs();
 		break;
 	case 'r':
-		if(build.enabled)
+		if(build.enabled){
 			bwall(xcursor, ycursor, build.x, build.y);
+			build.x = xcursor;
+			build.y = ycursor;
+		}
 		break;
 	default:{};
 	}
@@ -318,7 +370,8 @@ int main()
 		if(input != ERR)
 			evalkey(input);
 		draw();
-
+		if(cycle % 100 == 0)
+			move_peeps();
 	        gettimeofday(&end, NULL); //cycle time end
 		duration = end.tv_usec - start.tv_usec;
 		usleep(CYCLETIME - duration); //sleep to make sure cycle takes ~CYCLETIME

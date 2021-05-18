@@ -18,6 +18,7 @@
  *
  */
 
+#include "stacks.c"
 
 
 /* create object type, which contains the infrmation for in game objects*/
@@ -42,11 +43,14 @@ struct object {
 };                           
 
 struct entity {
-	int id;
 	int type;
 	int x;
 	int y;
 	object *using;
+	object *target;
+	stack *tasks;
+	stack *path_x;
+	stack *path_y;
 	/* TODO! */
 };
 

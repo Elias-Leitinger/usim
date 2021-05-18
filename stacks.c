@@ -17,6 +17,10 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
+#ifndef STACKS_H
+#define STACKS_H
+
+
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -96,8 +100,7 @@ int top(stack *st)
 int pop(stack *st)
 {
 	if(st->index == 0){
-		printf("ERR: pop on stack with index 0!\n");
-		return st->elements[0];
+		return -1;
 	}else if(st->index < (st->size - STCKBLK)){
 		st->elements = realloc(st->elements, sizeof(int) * st->size -\
 				       sizeof(int) * STCKBLK);
@@ -106,3 +109,6 @@ int pop(stack *st)
 	}else
 		return st->elements[st->index--];
 }
+
+
+#endif
