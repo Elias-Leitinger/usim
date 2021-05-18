@@ -197,10 +197,14 @@ int peep_here(int x, int y)
 void peep_needs(){
 	for(int i = 0; i < MAXENT; i++){
 		if(people[i].type != 0){
-			people[i].need.sleep -= 0.1;
-			people[i].need.toilet -= 0.5;
-			people[i].need.food -= 0.25;
-			people[i].need.fun -= 0.2;
+			if(people[i].need.sleep)
+				people[i].need.sleep -= 0.1;
+			if(people[i].need.toilet)
+				people[i].need.toilet -= 0.5;
+			if(people[i].need.food)
+				people[i].need.food -= 0.25;
+			if(people[i].need.fun)
+				people[i].need.fun *= 0.996;
 		}
 	}
 }
@@ -323,12 +327,21 @@ void wtest()  //remove asap!!
 	people[0].type = 1;
 	people[0].x = 10;
 	people[0].y = 10;
-	people[0].name = "MAX MUSTERMANN";
+	people[0].name = "Max MUSTERMANN";
 	people[0].need = (needs){100, 100, 100, 100};
 	people[0].path_x = makestack();
 	people[0].path_y = makestack();
 	push(people[0].path_x, 20);
 	push(people[0].path_y, 15);
+	people[1] = (entity){
+		.type = 1,
+		.x = 2,
+		.y = 1,
+		.name = "Paul DICKBLAST",
+		.need = (needs){10, 10, 10, 10},
+		.path_x = makestack(),
+		.path_y = makestack()
+	};
 }
 
 int setbcurs(){
